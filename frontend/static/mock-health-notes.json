@@ -1,0 +1,14 @@
+[
+  {
+    "noteId": "note1",
+    "nurseId": "nurse1",
+    "note": "left eye is lazy",
+    "timestamp": 1596015612837
+  },
+  {
+    "noteId": "note2",
+    "nurseId": "nurse2",
+    "note": "healthy as an ox",
+    "timestamp": 1596015632837
+  }
+]
