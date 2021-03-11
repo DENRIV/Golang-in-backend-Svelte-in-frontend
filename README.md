@@ -1,143 +1,166 @@
-# svelte-golang-demo
+# golang-svelte
 
-A demo app using Svelte as frontend and GoLang as backend. This app provides an web-based GUI for nurses to manage patient's health notes. 
+# Golang in backend & Svelte in frontend
 
-## site map
+# GO + SVELTE
 
-- home (login, logout, register)
-- patients list view (accessible by nurses & admin, can add/edit patient)
-	- patient view (list of notes, nurses can add new notes and edit existing)
-- ** admin (add/edit users: admin & nurses)
-- ** profile (view/modify personal details for logged-in user)
+# 1) Introduction
 
-** not implemented 
+.
+Z:\golang\go_svelte\svelte-golang-demo-master
+.
+home (login, logout, register)
+patients list view (accessible by nurses & admin, can add/edit patient)
+patient view (list of notes, nurses can add new notes and edit existing)
+.
+frontend, JWT is used to authenticate client (web browser)
+.
+backend, he backend will be used to authenticate client session by providing JWT tokens.
+.
+services & data modelling :
+.
+auth service
 
-## application design
+/api/v1/session
+POST/DELETE (login, logout)
+/api/v1/regiser
+POST (register new userz)
+user service
 
-#### frontend
+/api/v1/users
 
-Svelte is used to compile frontend into static html/css/js pages that can be served over HTTP(S). JWT is used to authenticate client (web browser), as well as validate client session using stateless servers.
+GET
+/api/v1/user?user-id=
 
-One advantage of using svelte is its extremely small and fast compiled size. Site built with svelt can fun very fast and require little resources, this can be advantageous especially in context of mobile devices. Browser compatibility of the target mobile device should be investigated.
 
-Internationalization possibiles will not be address; if needed, it should be possible to achieve localization using plugins such as [svelte-i18n](https://github.com/kaisermann/svelte-i18n).
+userid (login id)
+name (full name)
+secret (salted hashed password)
+last-login (not implemented)
+created-time
+last-modified (not implemented)
+patient service
 
-#### backend
+/api/v1/patients
 
-A single goLang backend service is used to authenticate and serve all api requests. The backend will be used to authenticate client session by providing JWT tokens.
+GET (list)
+/api/v1/patient?patient-id=
 
-if/when the need arises to separate the backend into individual microserves, the backend folder structure is designed to make this process relatively simple. Some code refactoring may need to be done, for example, the session service may be updated to call user service endpoint instead of accessing it directly
+POST/GET/DELETE (single)
+/api/v1/patient-notes?patient-id=
 
-Data is persisted by backend using postgres sql using (SQLBoiler)[https://github.com/volatiletech/sqlboiler]
+GET (list)
+/api/v1/patient-note?note-id=
 
-#### services & data modelling
+POST (new health note)
+GET/DELETE (not implemented)
 
-also refer to [api/README.md](api/README.md) for sample request/response
+.
 
-- auth service
-	- /api/v1/session
-		- POST/DELETE (login, logout)
-	- /api/v1/regiser
-		- POST (register new userz)
+> repository folder structure
+project root
+-api (folder) - (not implemented)
+api definition
+swagger/openapi stub generation scripts
+-frontend (folder)
+src code, svelte
+Dockerfiles for dev & testing
+-backend (folder)
+src code
+Dockerfiles for dev & testing
+-db-schema (folder)
+schema definition
+pre-seeded data for dev/testing
+db schema migration scripts (https://github.com/golang-migrate/migrate)
+db orm generator (sqlboiler, https://github.com/lqs/sqlingo)
+...
 
-- user service
-	- /api/v1/users
-		- GET
-	- /api/v1/user?user-id=
-		- POST/GET/DELETE (not implemented)
+> 
+https://github.com/volatiletech/sqlboiler
+SQLBoiler is a tool to generate a Go ORM tailored to your database schema.
 
-	- dao user
-		- userid (login id)
-		- name (full name)
-		- secret (salted hashed password)
-		- last-login (not implemented)
-		- created-time
-		- last-modified (not implemented)
+# 2) backend
 
-- patient service		
-	- /api/v1/patients
-		- GET (list)
-	- /api/v1/patient?patient-id=
-		- POST/GET/DELETE (single)
-	- /api/v1/patient-notes?patient-id=
-		- GET (list)
-	- /api/v1/patient-note?note-id=
-		- POST (new health note)
-		- GET/DELETE (not implemented)
+backend
+D:\golang\go_svelte\svelte-golang-demo-master\backend
+.
+# run
+go get
+go build
+.
+# Install postgres library
+# ...
+# if that doesnt work, try
+go get -u -t -v github.com/volatiletech/sqlboiler
+go get -u -v github.com/volatiletech/sqlboiler/drivers/sqlboiler-psql
 
-	- dao patient
-		- patientid (uuid)
-		- name (full name)
-		- location (facility-id, bed-id, room-id, etc)
-		- created-time
-		- last-modified (not implemented)
-	- dao patient-note
-		- noteid (uuid)
-		- userid (fk)
-		- patientid (fk)
-		- note (text)
-		- created-time
-		- last-modified (not implemented)
+# [!]
+# Run
+go run main.go
+  localhost:8000
 
-## repository folder structure
+## running backend in docker container
+# build app as docker image
+docker build . -t patient-backend
+# run app as docker image
+docker run --rm -it -p 8000:8000 patient-backend
 
-- project root
-	- api (folder) -  (not implemented)
-		- api definition
-		- swagger/openapi stub generation scripts
-	- frontend (folder)
-		- src code, svelte
-		- Dockerfiles for dev & testing
-	- backend (folder)
-		- src code
-		- Dockerfiles for dev & testing
-	- db-schema (folder)
-		- schema definition
-		- pre-seeded data for dev/testing
-		- db schema migration scripts (https://github.com/golang-migrate/migrate)
-		- db orm generator (sqlboiler, https://github.com/lqs/sqlingo)
-	- integration-tests (folder) (not implemented)
-		- synthetic testing (eg. selenium)
-		- Docker-compose files for dev & testing
-	- cicd (folder) (not implemented)
-		- Dockerfiles for ci/cd & production services
-		- cloud deployment manifests (k8s, terraform, etc)
-		- ci/cd bash scripts
+# 3) frontend
 
-## ci/cd considerations
+frontend 
+D:\golang\go_svelte\svelte-golang-demo-master\frontend
+.
+# download npm dependencies
+npm install
 
-(not implemented) code lint, unit testing, gui testing in ci/cd. Dockerfiles provided to facilitate build, test, and service execution environments.
+Note:
+D:\golang\go_svelte\svelte-golang-demo-master\frontend\node_modules
+files generated by node.js [npm install]
 
-## sample deployment architecture
 
-frontend website can deployed as static website; CDN may be utilized. Backend services can be deployed as stateless containerized (K8S) or serverless cloud architecture, using L7 cloud load balancers with TLS termination. A reverse proxy (or load balancer with path-based-routing support) may be used to scale different APIs individually, even if the codebase for different APIs is not separated.
+# ... Cypress Version: 4.11.0 (..)
+# ... Z:\Users\LUR\AppData\Local\Cypress\Cache\4.11.0
 
-## service monitoring consideration
+# [!]
+# run dev mode with hot reload on http://localhost:3000
+npm run dev
 
-frontend can be instrumented with services such as Google Analytics. backend goLang services can be instrumented for Prometheus using official [go client](https://github.com/prometheus/client_golang), and for OpenTracing using [OpenTracing API for Go](https://github.com/opentracing/opentracing-go)
+# build static pages & serve on http://localhost:5000  
+npm run export && npx serve __sapper__/export 
 
-## future work
+# run tests
+npm install cypress
+npm run test
 
-- check licensing
-- openapi/swagger definition & stub generation
-- frontend unit tests
-- frontend instrumentation (eg. Google Analytics)
-- backend unit tests
-- backend instrumentation (eg. prometheus, opentracing)
-- integration tests
-- code lint in ci/cd
-- look into more secure authentication services/products & practices
 
-## build & run compiled pages locally
+Browser :
+http://localhost:3000
+.
+[Register New]
+nurse2
+key : nurse2nurse2
+...
 
-to run frontend in developer mode, see [frontend/README.md](frontend/README.md)
 
-```sh
-# (re)build images & start
-docker-compose up --build
+DB :
+main.go
+"host=localhost dbname=patientdb user=docker password=docker
+.
+Z:\golang\go_svelte\svelte-golang-demo-master\db-schema\migrations
+patient_note
+patient
+user
 
-# surf http://localhost:5000/
 
-# stop
-docker-compose down
-```
+postgre
+patienddb
+user : postgre
+
+[SQL]
+SELECT * FROM patient;
+SELECT * FROM user;
+SELECT * FROM public.patient_note;
+#
+CREATE USER docker SUPERUSER;
+ALTER USER docker WITH PASSWORD 'docker';
+
