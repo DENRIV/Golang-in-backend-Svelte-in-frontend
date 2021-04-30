@@ -6,21 +6,21 @@
 
 # 1) Introduction
 
-.
+
 Z:\golang\go_svelte\svelte-golang-demo-master
-.
+
 home (login, logout, register)
 
 patients list view (accessible by nurses & admin, can add/edit patient)
 
 patient view (list of notes, nurses can add new notes and edit existing)
-.
+
 frontend, JWT is used to authenticate client (web browser)
-.
-backend, he backend will be used to authenticate client session by providing JWT tokens.
-.
+
+backend, the backend will be used to authenticate client session by providing JWT tokens.
+
 services & data modelling :
-.
+
 auth service
 
 /api/v1/session
@@ -57,6 +57,7 @@ patient service
 /api/v1/patients
 
 GET (list)
+
 /api/v1/patient?patient-id=
 
 POST/GET/DELETE (single)
@@ -74,7 +75,7 @@ GET/DELETE (not implemented)
 .
 
 > repository folder structure
-> 
+
 project root
 
 -api (folder) - (not implemented)
